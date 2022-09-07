@@ -1,0 +1,5 @@
+init.yml
+.terraform
+*.hcl
+*.tfstate*
+ssh.tf

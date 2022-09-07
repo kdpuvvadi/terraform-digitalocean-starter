@@ -1,0 +1,24 @@
+#cloud-config
+
+groups:
+  - ubuntu: [root,sys]
+  - terraform
+
+users:
+  - default
+  - name: terraform
+    gecos: terraform
+    shell: /bin/bash
+    primary_group: terraform
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: users, admin, sudo
+    lock_passwd: false
+    ssh_authorized_keys:
+      - pubkey
+
+runcmd:
+  - sudo apt-get update
+  - sudo apt-get upgrade -y
+  - sed -i -e '/^PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
+  - sed -i -e '$aAllowUsers ansible' /etc/ssh/sshd_config
+  - restart ssh
